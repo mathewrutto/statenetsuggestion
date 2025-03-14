@@ -1,6 +1,5 @@
 import mysql from "mysql2/promise";
 
-// Connect to the database
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -13,13 +12,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, suggestion } = req.body;
+  const { name, email, phone, suggestion } = req.body;
 
   try {
     const connection = await pool.getConnection();
     await connection.execute(
-      "INSERT INTO suggestions (name, email, suggestion) VALUES (?, ?, ?)",
-      [name, email, suggestion]
+      "INSERT INTO suggestions (name, email, phone, suggestion) VALUES (?, ?, ?, ?)",
+      [name, email, phone, suggestion]
     );
     connection.release();
     return res.status(200).json({ message: "Submission successful!" });
