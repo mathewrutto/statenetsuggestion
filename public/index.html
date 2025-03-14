@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your Suggestion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            max-width: 400px;
+            margin: 20px auto;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Submit Your Suggestion</h2>
+
+    <form id="suggestionForm">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="suggestion" placeholder="Your Suggestion" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById("suggestionForm").addEventListener("submit", async function(event) {
+            event.preventDefault(); // Prevents the form from refreshing the page
+
+            const formData = new FormData(this); // Gets form data
+            const jsonData = Object.fromEntries(formData.entries()); // Converts to JSON format
+
+            try {
+                const response = await fetch("/api/submit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(jsonData),
+                });
+
+                const result = await response.json();
+                alert(result.message || "Submission failed!");
+            } catch (error) {
+                alert("Error submitting form. Please try again.");
+            }
+        });
+    </script>
+
+</body>
+</html>
